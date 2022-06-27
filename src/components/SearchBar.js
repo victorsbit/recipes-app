@@ -43,7 +43,7 @@ function SearchBar() {
     if (returnAPI !== null && returnAPI.length > 1 && location.pathname === '/drinks') {
       setAllDrinks(true);
     }
-  }, [returnAPI]);
+  }, [returnAPI, location.pathname]);
 
   return (
     <main>

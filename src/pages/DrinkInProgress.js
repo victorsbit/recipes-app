@@ -10,10 +10,8 @@ export default function FoodInProgress() {
   const [recipe, setRecipe] = useState({});
   const [ingredientList, setIngredientList] = useState([]);
   const [measureList, setMeasureList] = useState([]);
-  const [isChecked, setIsChecked] = useState([false, false, false]);
   const [linkCopied, setLinkCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
   const params = useParams();
   const history = useHistory();
 
@@ -53,37 +51,6 @@ export default function FoodInProgress() {
     setMeasureList(newMeasureList);
     setIngredientList(newIngredientsList);
   }, [recipe]);
-
-  useEffect(() => {
-    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (inProgressRecipes === null) {
-      localStorage.setItem('inProgressRecipes', JSON.stringify(isChecked));
-    }
-  }, [isChecked]);
-
-  useEffect(() => {
-    const THREE = 3;
-    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    setIsChecked(inProgressRecipes.slice(0, THREE));
-  }, []);
-
-  useEffect(() => {
-    if (isChecked.every((checkbox) => checkbox === true)) {
-      setIsDisabled(false);
-    } else {
-      setIsDisabled(true);
-    }
-  }, [isChecked]);
-
-  const handleCheckBox = (index, bool) => {
-    setIsChecked((prevList) => {
-      const newList = [...prevList];
-      newList[index] = bool;
-
-      localStorage.setItem('inProgressRecipes', JSON.stringify(newList));
-      return newList;
-    });
-  };
 
   return (
     <div>
@@ -147,8 +114,6 @@ export default function FoodInProgress() {
               <input
                 type="checkbox"
                 id={ index }
-                checked={ isChecked[index] }
-                onChange={ ({ target }) => handleCheckBox(index, target.checked) }
               />
               {`${ingredient} - ${measureList[index]}`}
             </label>
@@ -156,11 +121,11 @@ export default function FoodInProgress() {
         ))}
       </ul>
       <div>
-        <p data-testid="instructions">Instructions</p>
+        <h2>Instructions</h2>
+        <p data-testid="instructions">{recipe.strInstructions}</p>
         <button
           type="button"
           data-testid="finish-recipe-btn"
-          disabled={ isDisabled }
           onClick={ () => history.push('/done-recipes') }
         >
           Finish recipe

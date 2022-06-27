@@ -140,7 +140,6 @@ export default function FoodDetails() {
             src={ blackHeartIcon }
             onClick={ () => {
               setIsRecipeFavorite(!isRecipeFavorite);
-              addRecipeToFavoriteList(recipe, 'food');
             } }
           >
             <img src={ blackHeartIcon } alt="#" />
