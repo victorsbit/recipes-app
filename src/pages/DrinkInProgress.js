@@ -9,17 +9,16 @@ export default function FoodInProgress() {
   const { verifyFavoriteRecipe, addRecipeToFavoriteList } = useContext(GlobalContext);
   const [recipe, setRecipe] = useState({});
   const [ingredientList, setIngredientList] = useState([]);
+  const [ingredientsDone, setIngredientsDone] = useState([]);
   const [measureList, setMeasureList] = useState([]);
-  const [isChecked, setIsChecked] = useState([false, false, false]);
   const [linkCopied, setLinkCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [ableBtn, setAbleBtn] = useState(true);
   const params = useParams();
+  const { id } = params;
   const history = useHistory();
 
   useEffect(() => {
-    const { id } = params;
-
     const requestRecipe = async () => {
       const API_URL = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
       const result = await fetch(API_URL);
@@ -30,7 +29,7 @@ export default function FoodInProgress() {
 
     setIsFavorite(verifyFavoriteRecipe(id));
     requestRecipe();
-  }, [params, verifyFavoriteRecipe]);
+  }, [verifyFavoriteRecipe, id]);
 
   useEffect(() => {
     const ingredients = Object.entries(recipe);
@@ -55,35 +54,58 @@ export default function FoodInProgress() {
   }, [recipe]);
 
   useEffect(() => {
-    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (inProgressRecipes === null) {
-      localStorage.setItem('inProgressRecipes', JSON.stringify(isChecked));
-    }
-  }, [isChecked]);
+    const inProgressRecipes = JSON
+      .parse(localStorage.getItem('inProgressRecipes') || '{}');
 
-  useEffect(() => {
-    const THREE = 3;
-    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    setIsChecked(inProgressRecipes.slice(0, THREE));
-  }, []);
+    if (inProgressRecipes.cocktails === undefined) {
+      const obj = {
+        cocktails: {
+          [id]: [],
+        },
+        meals: {},
+      };
 
-  useEffect(() => {
-    if (isChecked.every((checkbox) => checkbox === true)) {
-      setIsDisabled(false);
+      localStorage.setItem('inProgressRecipes', JSON.stringify(obj));
     } else {
-      setIsDisabled(true);
+      const { cocktails } = inProgressRecipes;
+      setIngredientsDone([...cocktails[id]]);
     }
-  }, [isChecked]);
+  }, [id]);
 
-  const handleCheckBox = (index, bool) => {
-    setIsChecked((prevList) => {
-      const newList = [...prevList];
-      newList[index] = bool;
+  useEffect(() => {
+    const LENGTH = ingredientList.length;
+    if (ingredientsDone.length === LENGTH) {
+      setAbleBtn(false);
+    } else {
+      setAbleBtn(true);
+    }
+  }, [ingredientsDone, ingredientList]);
 
-      localStorage.setItem('inProgressRecipes', JSON.stringify(newList));
-      return newList;
-    });
+  const handleStorage = (name, isChecked) => {
+    const inProgressRecipes = JSON
+      .parse(localStorage.getItem('inProgressRecipes') || '{}');
+
+    const { cocktails } = inProgressRecipes;
+    let newIngredientList = [...cocktails[id]];
+    if (isChecked && (!cocktails[id].some((ingredient) => ingredient === name))) {
+      newIngredientList = [...cocktails[id], name];
+      setIngredientsDone([...newIngredientList]);
+    } else if (!isChecked && cocktails[id].some((ingredient) => ingredient === name)) {
+      newIngredientList = cocktails[id].filter((ingredient) => ingredient !== name);
+      setIngredientsDone([...newIngredientList]);
+    }
+
+    const newObjStorage = {
+      cocktails: {
+        ...inProgressRecipes.cocktails,
+        [id]: newIngredientList,
+      },
+      meals: { ...inProgressRecipes.meals },
+    };
+    localStorage.setItem('inProgressRecipes', JSON.stringify(newObjStorage));
   };
+
+  const handleChecked = (ingredient) => ingredientsDone.some((ing) => ing === ingredient);
 
   return (
     <div>
@@ -96,7 +118,6 @@ export default function FoodInProgress() {
           type="button"
           data-testid="share-btn"
           onClick={ () => {
-            const { id } = params;
             navigator.clipboard.writeText(`http://localhost:3000/drinks/${id}`);
             setLinkCopied(true);
           } }
@@ -111,7 +132,6 @@ export default function FoodInProgress() {
             src={ blackHeartIcon }
             onClick={ () => {
               setIsFavorite(!isFavorite);
-              addRecipeToFavoriteList(recipe, 'drink');
             } }
           >
             <img src={ blackHeartIcon } alt="#" />
@@ -147,8 +167,9 @@ export default function FoodInProgress() {
               <input
                 type="checkbox"
                 id={ index }
-                checked={ isChecked[index] }
-                onChange={ ({ target }) => handleCheckBox(index, target.checked) }
+                checked={ handleChecked(ingredient) }
+                name={ ingredient }
+                onChange={ ({ target }) => handleStorage(target.name, target.checked) }
               />
               {`${ingredient} - ${measureList[index]}`}
             </label>
@@ -156,11 +177,12 @@ export default function FoodInProgress() {
         ))}
       </ul>
       <div>
-        <p data-testid="instructions">Instructions</p>
+        <h2>Instructions</h2>
+        <p data-testid="instructions">{recipe.strInstructions}</p>
         <button
           type="button"
           data-testid="finish-recipe-btn"
-          disabled={ isDisabled }
+          disabled={ ableBtn }
           onClick={ () => history.push('/done-recipes') }
         >
           Finish recipe
