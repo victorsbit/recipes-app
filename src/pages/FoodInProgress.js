@@ -13,6 +13,7 @@ export default function FoodInProgress() {
   const [measureList, setMeasureList] = useState([]);
   const [linkCopied, setLinkCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [ableBtn, setAbleBtn] = useState(true);
   const params = useParams();
   const { id } = params;
   const history = useHistory();
@@ -71,6 +72,15 @@ export default function FoodInProgress() {
     }
   }, [id]);
 
+  useEffect(() => {
+    const LENGTH = ingredientList.length;
+    if (ingredientsDone.length === LENGTH) {
+      setAbleBtn(false);
+    } else {
+      setAbleBtn(true);
+    }
+  }, [ingredientsDone, ingredientList]);
+
   const handleStorage = (name, isChecked) => {
     const inProgressRecipes = JSON
       .parse(localStorage.getItem('inProgressRecipes') || '{}');
@@ -79,8 +89,10 @@ export default function FoodInProgress() {
     let newIngredientList = [...meals[id]];
     if (isChecked && (!meals[id].some((ingredient) => ingredient === name))) {
       newIngredientList = [...meals[id], name];
+      setIngredientsDone([...newIngredientList]);
     } else if (!isChecked && meals[id].some((ingredient) => ingredient === name)) {
       newIngredientList = meals[id].filter((ingredient) => ingredient !== name);
+      setIngredientsDone([...newIngredientList]);
     }
 
     const newObjStorage = {
@@ -170,6 +182,7 @@ export default function FoodInProgress() {
         <button
           type="button"
           data-testid="finish-recipe-btn"
+          disabled={ ableBtn }
           onClick={ () => history.push('/done-recipes') }
         >
           Finish recipe
