@@ -16,7 +16,7 @@ function Favorites() {
 
   return (
     <div className="fav-all">
-      <Header title="Favorite Recipes" />
+      <Header title="Favorite Recipes" showBt={ false } />
       <button
         type="button"
         data-testid="filter-by-all-btn"
