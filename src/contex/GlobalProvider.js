@@ -8,6 +8,9 @@ function GlobalProvider({ children }) {
   const [returnAPI, setReturnAPI] = useState([]);
   const [renderMealsState, setRenderMealsState] = useState([]);
   const [renderDrinksState, setRenderDrinksState] = useState([]);
+  const [exploreFood, setExploreFood] = useState(false);
+  const [exploreDrink, setExploreDrink] = useState(false);
+
   const alert = 'Sorry, we haven\'t found any recipes for these filters.';
 
   const firstNameLetterMeal = async (letter) => {
@@ -139,6 +142,7 @@ function GlobalProvider({ children }) {
 
   const contextValue = {
     inputSearchBar,
+    ingredientsMeal,
     setInputSearchBar,
     radioValue,
     setRadioValue,
@@ -151,6 +155,11 @@ function GlobalProvider({ children }) {
     setRenderMealsState,
     renderDrinksState,
     setRenderDrinksState,
+    ingredientsDrinks,
+    exploreFood,
+    setExploreFood,
+    exploreDrink,
+    setExploreDrink,
   };
 
   return (
