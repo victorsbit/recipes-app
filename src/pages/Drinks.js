@@ -5,7 +5,12 @@ import GlobalContext from '../contex/GlobalContext';
 import './Generic.css';
 
 function Drinks() {
-  const { setRenderDrinksState, renderDrinksState } = useContext(GlobalContext);
+  const {
+    setRenderDrinksState,
+    renderDrinksState,
+    exploreDrink,
+    setExploreDrink,
+  } = useContext(GlobalContext);
   const [categorysState, getCategorysState] = useState([]);
   const [selectedCat, setSelecterdCat] = useState('');
   const CINCO = 5;
@@ -27,7 +32,11 @@ function Drinks() {
     };
 
     getCategorys();
-    renderDrinks();
+    if (!exploreDrink) {
+      renderDrinks();
+    } else {
+      setExploreDrink(true);
+    }
   }, []);
 
   const handleFilterBnt = async (category) => {
