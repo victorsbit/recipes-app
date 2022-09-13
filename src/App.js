@@ -19,7 +19,7 @@ import FoodInProgress from './pages/FoodInProgress';
 import DrinkInProgress from './pages/DrinkInProgress';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import NotFound from './pages/NotFound';
-import GlobalProvider from './contex/GlobalProvider';
+import GlobalProvider from './context/GlobalProvider';
 
 function App() {
   return (

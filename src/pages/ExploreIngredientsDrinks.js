@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import GlobalContext from '../contex/GlobalContext';
+import GlobalContext from '../context/GlobalContext';
 import './ExploreGeneric.css';
 
 function ExploreIngsDrinks() {

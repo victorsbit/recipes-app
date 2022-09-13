@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import GlobalContext from '../contex/GlobalContext';
+import GlobalContext from '../context/GlobalContext';
 
 function SearchBar() {
   const DOZE = 12;

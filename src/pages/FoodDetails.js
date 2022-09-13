@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
-import GlobalContext from '../contex/GlobalContext';
+import GlobalContext from '../context/GlobalContext';
 
 export default function FoodDetails() {
   const history = useHistory();

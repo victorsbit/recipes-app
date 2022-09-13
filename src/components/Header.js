@@ -5,7 +5,7 @@ import './Header.css';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
-import GlobalContext from '../contex/GlobalContext';
+import GlobalContext from '../context/GlobalContext';
 
 function Header({ title, showBt }) {
   const [able, setAble] = useState(false);
