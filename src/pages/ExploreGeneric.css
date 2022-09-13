@@ -1,0 +1,28 @@
+.exp-ing-foods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 10px;
+}
+
+.explore-ing-container {
+  align-items: center;
+  background-color: darkgrey;
+  border: solid black 1px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 150px;
+  width: 100px;
+}
+
+.nations-drop-down {
+  max-height: 50px;
+  overflow-y: auto;
+}
+
+.img-small {
+  max-height: 80px;
+  max-width: 80px;
+}
