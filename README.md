@@ -3,6 +3,9 @@
 ## Contexto
 Este projeto foi desenvolvido em grupo durante nossa jornada de aprendizagem em Front-end na Trybe. Trata-se de uma aplicação que possui um catálogo de receitas de comidas e bebidas. Nela, é ṕossível navegar, favoritar e acompanhar o progresso individual de receitas.
 
+## Requisitos
+> Node.js v16.x
+
 ## Técnologias usadas
 
 Front-end:
