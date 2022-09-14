@@ -12,12 +12,11 @@ Front-end:
 
 > Frontend
 ```bash
-cd ./
 npm install
 ``` 
 ## Executando aplicação
 
 * Para rodar o front-end:
 ```
-cd ./ && npm start
+npm start
 ```
